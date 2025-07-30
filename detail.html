@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Country Details</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; background: #fafafa; color: #111; max-width: 900px; margin: auto; }
+  button { padding: 10px 20px; margin-bottom: 20px; cursor: pointer; }
+  img { width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);}
+</style>
+</head>
+<body>
+
+<button onclick="history.back()">← Back</button>
+
+<div id="country-details">Loading...</div>
+
+<script>
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  const code = getQueryParam('code');
+  const detailsDiv = document.getElementById('country-details');
+
+  if (!code) {
+    detailsDiv.innerHTML = '<p>No country code provided.</p>';
+  } else {
+    fetch(`https://restcountries.com/v3.1/alpha/${code}`)
+      .then(res => res.json())
+      .then(data => {
+        const country = data[0];
+        detailsDiv.innerHTML = `
+          <img src="${country.flags.png}" alt="Flag of ${country.name.common}">
+          <h1>${country.name.common}</h1>
+          <p><strong>Native Name:</strong> ${Object.values(country.name.nativeName)[0].common}</p>
+          <p><strong>Population:</strong> ${country.population.toLocaleString()}</p>
+          <p><strong>Region:</strong> ${country.region}</p>
+          <p><strong>Sub Region:</strong> ${country.subregion || 'N/A'}</p>
+          <p><strong>Capital:</strong> ${country.capital ? country.capital[0] : 'N/A'}</p>
+          <p><strong>Top Level Domain:</strong> ${country.tld ? country.tld[0] : 'N/A'}</p>
+          <p><strong>Currencies:</strong> ${country.currencies ? Object.values(country.currencies).map(c => c.name).join(', ') : 'N/A'}</p>
+          <p><strong>Languages:</strong> ${country.languages ? Object.values(country.languages).join(', ') : 'N/A'}</p>
+          <p><strong>Border Countries:</strong> ${
+            country.borders ? country.borders.map(border => `<button onclick="location.href='detail.html?code=${border}'">${border}</button>`).join(' ') : 'None'
+          }</p>
+        `;
+      })
+      .catch(() => {
+        detailsDiv.innerHTML = '<p>Error loading country data.</p>';
+      });
+  }
+</script>
+
+</body>
+</html>

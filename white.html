@@ -12,7 +12,8 @@
 
     <div class="navbar">
         <h1>Where in the world?</h1>
-        <button class="dark-mode-btn"onclick="window.location.href='./dark.html'">🌙 Dark Mode</button>
+        <button id="mode-toggle" class="dark-mode-btn">🌙 Dark Mode</button>
+
     </div>
 
     <div class="controls">
@@ -21,63 +22,146 @@
     </div>
 
     <div class="container">
-        <div class="box1">
-            <img src="germaniya.webp" alt="Germany Flag" />
-            <h1>Germany</h1>
-            <p><strong>Population:</strong> 81,770,900</p>
-            <p><strong>Region:</strong> Europe</p>
-            <p><strong>Capital:</strong> Berlin</p>
-        </div>
-        <div class="box1">
-            <img src="usb.webp" alt="United States Flag" />
-            <h1>United States of America</h1>
-            <p><strong>Population:</strong> 323,947,000</p>
-            <p><strong>Region:</strong> Americas</p>
-            <p><strong>Capital:</strong> Washington, D.C.</p>
-        </div>
-        <div class="box1">
-            <img src="brazil.png" alt="Brazil Flag" />
-            <h1>Brazil</h1>
-            <p><strong>Population:</strong> 206,135,893</p>
-            <p><strong>Region:</strong> Americas</p>
-            <p><strong>Capital:</strong> Brasilia</p>
-        </div>
-        <div class="box1">
-            <img src="iceland.png" alt="Iceland Flag" />
-            <h1>Iceland</h1>
-            <p><strong>Population:</strong> 334,300</p>
-            <p><strong>Region:</strong> Europe</p>
-            <p><strong>Capital:</strong> Reykjavík</p>
-        </div>
-        <div class="box1">
-            <img src="avgoniston.svg" alt="Afghanistan Flag" />
-            <h1>Afghanistan</h1>
-            <p><strong>Population:</strong> 27,657,145</p>
-            <p><strong>Region:</strong> Asia</p>
-            <p><strong>Capital:</strong> Kabul</p>
-        </div>
-        <div class="box1">
-            <img src="alanisland.png" alt="Åland Islands Flag" />
-            <h1>Åland Islands</h1>
-            <p><strong>Population:</strong> 28,875</p>
-            <p><strong>Region:</strong> Europe</p>
-            <p><strong>Capital:</strong> Mariehamn</p>
-        </div>
-        <div class="box1">
-            <img src="albaniya.png" alt="Albania Flag" />
-            <h1>Albania</h1>
-            <p><strong>Population:</strong> 2,886,026</p>
-            <p><strong>Region:</strong> Europe</p>
-            <p><strong>Capital:</strong> Tirana</p>
-        </div>
-        <div class="box1">
-            <img src="algeriya.png" alt="Algeria Flag" />
-            <h1>Algeria</h1>
-            <p><strong>Population:</strong> 40,400,000</p>
-            <p><strong>Region:</strong> Africa</p>
-            <p><strong>Capital:</strong> Algiers</p>
-        </div>
+
     </div>
+
+
+    <div id="details" class="details"></div>d
+    <script>
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     const searchInput = document.querySelector('input[type="search"]');
+        //     const container = document.querySelector('.container');
+
+        //     const res = () => {
+        //         fetch('https://restcountries.com/v3.1/all?fields=name,population,region,capital,flags')
+        //             .then(res => res.json())
+        //             .then(data => {
+        //                 container.innerHTML = '';
+        //                 data.forEach(s => {
+        //                     const box = document.createElement("div");
+        //                     box.className = 'box1';
+
+        //                     box.innerHTML = `
+        //                     <img src="${s.flags?.png}" alt="${s.flags?.alt || 'Flag'}" />
+        //                     <h1>${s.name.common}</h1>
+        //                     <p><strong>Population:</strong> ${s.population.toLocaleString()}</p>
+        //                     <p><strong>Region:</strong> ${s.region}</p>
+        //                     <p><strong>Capital:</strong> ${s.capital?.[0] || 'N/A'}</p>
+        //                 `;
+
+        //                     container.appendChild(box);
+        //                 });
+        //             })
+        //             .catch(err => console.error("Xatolik yuz berdi:", err));
+        //     };
+
+        //     // Filtering function
+        //     searchInput.addEventListener('input', function () {
+        //         const searchTerm = this.value.trim().toLowerCase();
+        //         const countryBoxes = container.querySelectorAll('.box1');
+
+        //         countryBoxes.forEach(box => {
+        //             const countryName = box.querySelector('h1').textContent.toLowerCase();
+        //             if (countryName.includes(searchTerm)) {
+        //                 box.style.display = 'block';
+        //             } else {
+        //                 box.style.display = 'none';
+        //             }
+        //         });
+        //     });
+
+        //     res();
+
+        //     const toggleBtn = document.getElementById('mode-toggle');
+        //     const body = document.body;
+
+        //     toggleBtn.addEventListener('click', () => {
+        //         body.classList.toggle('dark');
+
+        //         if (body.classList.contains('dark')) {
+        //             toggleBtn.textContent = '☀ White Mode';
+        //         } else {
+        //             toggleBtn.textContent = '🌙 Dark Mode';
+        //         }
+        //     });
+
+        // });
+
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.querySelector('input[type="search"]');
+            const container = document.querySelector('.container');
+            const toggleBtn = document.getElementById('mode-toggle');
+            const body = document.body;
+
+            // Dark mode holatini localStorage dan olish va o'rnatish
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                body.classList.add('dark');
+                toggleBtn.textContent = '☀ White Mode';
+            }
+
+            const res = () => {
+                fetch('https://restcountries.com/v3.1/all?fields=name,population,region,capital,flags,cca3')
+                    .then(res => res.json())
+                    .then(data => {
+                        container.innerHTML = '';
+                        data.forEach(s => {
+                            const box = document.createElement("div");
+                            box.className = 'box1';
+
+                            // cca3 kodini data-code atributiga qo'shamiz
+                            box.setAttribute('data-code', s.cca3);
+
+                            box.innerHTML = `
+        <img src="${s.flags?.png}" alt="${s.flags?.alt || 'Flag'}" />
+        <h1>${s.name.common}</h1>
+        <p><strong>Population:</strong> ${s.population.toLocaleString()}</p>
+        <p><strong>Region:</strong> ${s.region}</p>
+        <p><strong>Capital:</strong> ${s.capital?.[0] || 'N/A'}</p>
+    `;
+
+                            // Flag bosilganda detail.html ga o'tish
+                            box.addEventListener('click', () => {
+                                const code = box.getAttribute('data-code');
+                                window.location.href = `detail.html?code=${code}`;
+                            });
+
+                            container.appendChild(box);
+                        });
+                    })
+                    .catch(err => console.error("Xatolik yuz berdi:", err));
+            };
+
+            searchInput.addEventListener('input', function () {
+                const searchTerm = this.value.trim().toLowerCase();
+                const countryBoxes = container.querySelectorAll('.box1');
+
+                countryBoxes.forEach(box => {
+                    const countryName = box.querySelector('h1').textContent.toLowerCase();
+                    box.style.display = countryName.includes(searchTerm) ? 'block' : 'none';
+                });
+            });
+
+            res();
+
+            toggleBtn.addEventListener('click', () => {
+                body.classList.toggle('dark');
+
+                if (body.classList.contains('dark')) {
+                    toggleBtn.textContent = '☀ White Mode';
+                    localStorage.setItem('darkMode', 'enabled');
+                } else {
+                    toggleBtn.textContent = '🌙 Dark Mode';
+                    localStorage.setItem('darkMode', 'disabled');
+                }
+            });
+        });
+
+    </script>
+
+
 
 </body>
 
