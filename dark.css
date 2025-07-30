@@ -1,0 +1,124 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #202c36;
+    color: #ffffff;
+}
+
+.container,
+.controls,
+.navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.navbar {
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2b3844;
+    border-bottom: 1px solid #2b3844;
+    margin-bottom: 30px;
+}
+
+.navbar h1 {
+    font-weight: 700;
+    font-size: 27px;
+    color: #ffffff;
+}
+
+.dark-mode-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.dark-mode-btn:hover {
+    border: 2px dashed #ffffff;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+input[type="search"] {
+    padding: 12px 20px;
+    border-radius: 5px;
+    border: 1px solid #2b3844;
+    background-color: #2b3844;
+    color: #ffffff;
+    width: 260px;
+    font-size: 14px;
+}
+
+input[type="search"]::placeholder {
+    color: #94a3b8;
+}
+
+button.filter-btn {
+    padding: 12px 20px;
+    background-color: #2b3844;
+    color: #ffffff;
+    border: 1px solid #2b3844;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+button.filter-btn:hover {
+    background-color: #3c4b5a;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 50px;
+}
+
+.box1 {
+    height: 350px;
+    background-color: #2b3844;
+    color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+    overflow: hidden;
+}
+
+.box1:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.box1 img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.box1 h1 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 16px 20px 10px;
+    color: #ffffff;
+}
+
+.box1 p {
+    font-size: 14px;
+    margin: 8px 20px;
+    color: #cbd5e1;
+}
+
+.box1 p strong {
+    color: #ffffff;
+}
